@@ -1,0 +1,70 @@
+task 3
+==========
+
+Сделать 3 коммита используя низкоуровневые команды:
+ 
+1) Коммит содержищий в себе 1 файл: task3.txt содержащий любой 4х строчний текст - коммит меседж "commit <%username> 2" где <%username> - ваш ник на github'е
+
+git init
+nano task3.txt
+
+echo 'commit nekanek 2' | git hash-object -w --stdin
+> d988e41d38fde9e702d1868013d32f9829af4363
+
+git update-index --add --cacheinfo 100644 d988e41d38fde9e702d1868013d32f9829af4363 task3.txt
+
+git write-tree
+> aa1e7cb9fcbb1c2b697175e8dabf363e7a3a8512
+
+echo "commit nekanek 2" | git commit-tree aa1e7cb9fcbb1c2b697175e8dabf363e7a3a8512
+> a0cd811a4cefe59850555c9ddfec63eff004d36d
+
+echo "a0cd811a4cefe59850555c9ddfec63eff004d36d" > .git/refs/heads/master
+git update-ref refs/heads/master a0cd811a4cefe59850555c9ddfec63eff004d36d
+
+
+2) Коммит содержащий в себе 2 файла: task3_new.txt - содержащий 2 строчки любого текста и task3.txt содержащий любой 4х строчний текст (другой нежели в п.1) - коммит меседж "commit <%username> 2"
+
+nano task3.txt
+nano task3_new.txt
+
+echo 'commit nekanek 2-2' | git hash-object -w --stdin
+> 00a45d85c769bba6f7f2475864b191f943735c7b
+
+git update-index --add --cacheinfo 100700 00a45d85c769bba6f7f2475864b191f943735c7b task3.txt
+
+git update-index --add --cacheinfo 100700 00a45d85c769bba6f7f2475864b191f943735c7b task3_new.txt
+
+git write-tree
+
+echo "commit nekanek 2-2" | git commit-tree -p a0cd811a4cefe59850555c9ddfec63eff004d36d 1ad4dd8896acb3f23ad9aa21a8d1e4aa6529b186
+
+git update-ref refs/heads/master 15dfe66fea79860d3117465d96289b2e3e5c752e
+
+
+
+3) Коммит содержищий в себе новую дирректорию gittask с файлом task3.txt первой версии - коммит меседж "commit <%username> 3"
+
+mkdir gittask
+nano gittask/task3.txt
+
+echo 'commit nekanek 3' | git hash-object -w --stdin
+> eeabeb3bf32ee247a2ccee0f489d7e09243028e9
+
+git update-index --add --cacheinfo 100750 eeabeb3bf32ee247a2ccee0f489d7e09243028e9 gittask/task3.txt
+
+git write-tree
+
+echo "commit nekanek 3" | git commit-tree -p 15dfe66fea79860d3117465d96289b2e3e5c752e 60e700c9fd17ed2414c0bdef6800b28e6e5d33b8
+
+git update-ref refs/heads/master a79b2e7ea9d1bfd058d614c30cc61535eae711a2
+
+
+
+
+Запушить в репу на гитабе + в README.MD записать весь список команд 
+
+git add READ.ME
+git commit -m"added readme"
+git remote add github https://github.com/nekanek/git-task3.git
+git push github master
